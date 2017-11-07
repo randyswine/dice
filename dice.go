@@ -72,15 +72,7 @@ func NewDice(size int) dice {
 }
 
 // Roll() returns random value of roll dice.
-func (d dice) Roll() int {
-	result := random.Intn(len(d) + 1)
-	if result == 0 {
-		result = d.Roll()
-	}
-	return result
-}
+func (d dice) Roll() int { return d[random.Intn(len(d))] }
 
 // String() represents a dice as a string.
-func (d dice) String() string {
-	return fmt.Sprintf("d%d", len(d))
-}
+func (d dice) String() string { return fmt.Sprintf("d%d", len(d)) }
