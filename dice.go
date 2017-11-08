@@ -2,9 +2,9 @@
 package dice
 
 import (
-	"bytes"
 	"fmt"
 	"math/rand"
+	"strings"
 	"time"
 )
 
@@ -43,17 +43,11 @@ func (ds diceSet) Roll() []int {
 
 // String() represents a set of dice as a string.
 func (ds diceSet) String() string {
-	var buf bytes.Buffer
-	buf.WriteString("Dice set: ")
-	buf.WriteByte('{')
-	for i, dice := range ds {
-		buf.WriteString(dice.String())
-		if len(ds) > 1 && i < len(ds)-1 {
-			buf.WriteString(", ")
-		}
+	var dices []string
+	for _, dice := range ds {
+		dices = append(dices, dice.String())
 	}
-	buf.WriteByte('}')
-	return buf.String()
+	return "Dice set: {" + strings.Join(dices, ", ") + "}"
 }
 
 // Dice.
