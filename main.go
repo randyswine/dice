@@ -11,6 +11,7 @@ import (
 func main() {
 	// Parse number of dice.
 	n := numberOfDiceFlag("n", -1, "Example: -n 2")
+	// Parse logging values.
 	logValues := logValuesFlag("l", nil, "Example: -l 2,6")
 	flag.Parse()
 	// Roll and print result.
@@ -22,8 +23,9 @@ func main() {
 			fmt.Printf("%d\t", val)
 		}
 	}
-	if logValues != nil {
-		fmt.Println(logValues)
+	// Log results of roll a dice.
+	if *logValues != nil {
+		logResult(*logValues)
 	}
 	os.Exit(0)
 }

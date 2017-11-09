@@ -33,16 +33,19 @@ func (f *numberFlag) String() string {
 	return "foobar"
 }
 
+// This function define the flag of logging of roll a dice and returns this value.
 func logValuesFlag(name string, values []int, usage string) *[]int {
 	f := logFlag{values}
 	flag.CommandLine.Var(&f, name, usage)
 	return &f.logValues
 }
 
+// This type implements flag.Value interface and define values for logging.
 type logFlag struct {
 	logValues []int
 }
 
+// Setter of logFlag value. Implements flag.Value interface.
 func (f *logFlag) Set(s string) error {
 	values := strings.Split(s, ",")
 	for _, val := range values {
@@ -59,6 +62,7 @@ func (f *logFlag) Set(s string) error {
 	return nil
 }
 
+// *logFlag.String() represents flag at string.
 func (f *logFlag) String() string {
 	return "fizzbazz"
 }
