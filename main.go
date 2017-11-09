@@ -4,44 +4,26 @@ package main
 import (
 	"flag"
 	"fmt"
+	"log"
 	"os"
 )
 
 func main() {
 	// Parse number of dice.
 	n := numberOfDiceFlag("n", -1, "Example: -n 2")
+	logValues := logValuesFlag("l", nil, "Example: -l 2,6")
 	flag.Parse()
 	// Roll and print result.
 	if *n > 0 {
+		if *n > 10 {
+			log.Fatal("Too many dice (0 < n <= 10).")
+		}
 		for _, val := range roll(*n) {
 			fmt.Printf("%d\t", val)
 		}
 	}
-	os.Exit(0)
-}
-
-// This function define the flag of number of dice and returns this number.
-func numberOfDiceFlag(name string, value int, usage string) *int {
-	f := numberFlag{value}
-	flag.CommandLine.Var(&f, name, usage)
-	return &f.n
-}
-
-// This type implements flag.Value interface and define number of dice.
-type numberFlag struct {
-	n int // Number of dice
-}
-
-// Setter of flag value. Implements flag.Value interface.
-func (f *numberFlag) Set(s string) error {
-	_, err := fmt.Sscanf(s, "%d", &f.n)
-	if err != nil {
-		return fmt.Errorf("error parse param -n=%s: %s", s, err.Error())
+	if logValues != nil {
+		fmt.Println(logValues)
 	}
-	return nil
-}
-
-// *numberFlag.String() represents flag at string.
-func (f *numberFlag) String() string {
-	return "foobar"
+	os.Exit(0)
 }
