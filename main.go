@@ -25,7 +25,14 @@ func main() {
 	}
 	// Log results of roll a dice.
 	if *logValues != nil {
-		logResult(*logValues)
+		err := logResult(*logValues)
+		if err != nil {
+			log.Fatalf("Error of logging: %s", err.Error())
+		}
+		err = stat()
+		if err != nil {
+			log.Fatalf("Error statistics: %s", err.Error())
+		}
 	}
 	os.Exit(0)
 }
