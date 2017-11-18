@@ -27,9 +27,10 @@ func logResult(values []int) error {
 // This function calculated statistics of roll a dice by log file data.
 func stat(numberOfDice int) error {
 	var (
-	//lines []string
+		totalRollCount int
 	)
 	sumCounts := make(map[int]int)
+	sumPerсents := make(map[int]percent)
 	content, err := ioutil.ReadFile(logFile)
 	if err != nil {
 		return fmt.Errorf("error of open log: %s", err.Error())
@@ -39,6 +40,7 @@ func stat(numberOfDice int) error {
 		numberOfDiceInLine := strings.Count(line, "+")
 		numberOfDiceInLine += 1
 		if numberOfDiceInLine == numberOfDice {
+			totalRollCount++
 			sides := strings.Split(line, "=")
 			sum := sides[len(sides)-1]
 			i, err := strconv.Atoi(sum)
@@ -48,8 +50,21 @@ func stat(numberOfDice int) error {
 			sumCounts[i]++
 		}
 	}
-	fmt.Println(sumCounts)
+	for rollSum, rollCount := range sumCounts {
+		sumPerсents[rollSum] = percentOfN(totalRollCount, rollCount)
+	}
+	fmt.Println(sumPerсents)
 	return nil
+}
+
+type percent float64
+
+func percentOfN(n int, x int) percent {
+	return percent((float64(x) * 100.0) / float64(n))
+}
+
+func (p percent) String() string {
+	return fmt.Sprintf("%.1f%%", p)
 }
 
 // This function sums the elements of the []values and returns a string of the form "2+6=8\n".
