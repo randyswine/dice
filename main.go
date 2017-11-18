@@ -13,6 +13,8 @@ func main() {
 	n := numberOfDiceFlag("n", -1, "Example: -n 2")
 	// Parse logging values.
 	logValues := logValuesFlag("l", nil, "Example: -l 2,6")
+	// Parse statistics param.
+	s := statValFlag("s", -1, "Example: -s 2")
 	flag.Parse()
 	// Roll and print result.
 	if *n > 0 {
@@ -29,7 +31,10 @@ func main() {
 		if err != nil {
 			log.Fatalf("Error of logging: %s", err.Error())
 		}
-		err = stat()
+	}
+	// Statistics.
+	if *s > 0 {
+		err := stat(*s)
 		if err != nil {
 			log.Fatalf("Error statistics: %s", err.Error())
 		}

@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"io/ioutil"
 	"os"
 	"strconv"
 	"strings"
@@ -24,9 +25,31 @@ func logResult(values []int) error {
 }
 
 // This function calculated statistics of roll a dice by log file data.
-func stat() error {
-	var err error
-	return err
+func stat(numberOfDice int) error {
+	var (
+	//lines []string
+	)
+	sumCounts := make(map[int]int)
+	content, err := ioutil.ReadFile(logFile)
+	if err != nil {
+		return fmt.Errorf("error of open log: %s", err.Error())
+	}
+	lines := strings.Split(string(content), "\n")
+	for _, line := range lines {
+		numberOfDiceInLine := strings.Count(line, "+")
+		numberOfDiceInLine += 1
+		if numberOfDiceInLine == numberOfDice {
+			sides := strings.Split(line, "=")
+			sum := sides[len(sides)-1]
+			i, err := strconv.Atoi(sum)
+			if err != nil {
+				return fmt.Errorf("cannot convert %s to int: %s", sum, err.Error())
+			}
+			sumCounts[i]++
+		}
+	}
+	fmt.Println(sumCounts)
+	return nil
 }
 
 // This function sums the elements of the []values and returns a string of the form "2+6=8\n".

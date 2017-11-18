@@ -66,3 +66,29 @@ func (f *logFlag) Set(s string) error {
 func (f *logFlag) String() string {
 	return "fizzbazz"
 }
+
+// This function define the flag of statistics param.
+func statValFlag(name string, value int, usage string) *int {
+	f := numberFlag{value}
+	flag.CommandLine.Var(&f, name, usage)
+	return &f.n
+}
+
+// This flag defined statistics params. Value n defined number of dice.
+type statFlag struct {
+	n int
+}
+
+// Setter of statFlag value. Implements flag.Value interface.
+func (f *statFlag) Set(s string) error {
+	_, err := fmt.Sscanf(s, "%d", &f.n)
+	if err != nil {
+		return fmt.Errorf("error parse param -s=%s: %s", s, err.Error())
+	}
+	return nil
+}
+
+// *statFlag.String() represents flag at string.
+func (f *statFlag) String() string {
+	return "foobar"
+}
